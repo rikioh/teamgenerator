@@ -96,6 +96,8 @@ const promptUser = async () =>
         }
     });
 
+
+
 // const employeeChoice = (answers) =>
 // {
 // // Add employees to html
@@ -115,21 +117,7 @@ const promptUser = async () =>
 // </body>
 // </html>`
 
-const init = () => {
-  promptUser()
-//   .then((answers) => {
-//     try {
-//     //   const employees = employeeChoice(answers)
-//     //   const md = generateHTML(answers);
-//     //   fs.writeFileSync('employeeList.html', md);
-//       console.log('Successfully wrote to employeeList.html');
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   });
-};
-
-// init();
+employeesBase = []
 
 const promptUser1 = async () =>
   inquirer.prompt([
@@ -172,76 +160,121 @@ const promptUser1 = async () =>
       },
   ], 
   )
+  
+  const choice1 = async () =>
+  inquirer.prompt([
+      //   prompts for engineer
+      {
+          type: 'input',
+          name: 'engineerName',
+          message: `Enter the engineer's name`,
+      },
+      {
+          type: 'input',
+          name: 'engineerID',
+          message: `Enter the engineer's employee ID`,
+      },
+      {
+          type: 'input',
+          name: 'engineerEmail',
+          message: `Enter the engineer's email`,
+      },
+      {
+          type: 'input',
+          name: 'engineerGithub',
+          message: `Enter the engineer's GitHub username`,
+      },
+       // prompt to add a new employee to the team besides manager
+      {
+          name: 'employee',
+          type: 'confirm',
+          message: 'Would you like to add an Employee?'
+      }, 
+      //   if the previous prompt was answered with 'y' then ask next question
+          {
+          when: function (response) {
+          return response.employee;
+          },
+          type: 'list',
+          name: 'employeetype',
+          message: 'Employee Type?',
+          choices:["Engineer", "Intern"]
+      },
+  ])
+
+const choice2 = async () =>
+        inquirer.prompt([
+            //   prompts for intern
+            {
+                type: 'input',
+                name: 'internName',
+                message: `Enter the intern's name`,
+            },
+            {
+                type: 'input',
+                name: 'internID',
+                message: `Enter the intern's employee ID`,
+            },
+            {
+                type: 'input',
+                name: 'internEmail',
+                message: `Enter the intern's email`,
+            },
+            {
+                type: 'input',
+                name: 'internUniversity',
+                message: `Enter the intern's university name`,
+            },
+            {
+                name: 'employee',
+                type: 'confirm',
+                message: 'Would you like to add an Employee?'
+            }, 
+            //   if the previous prompt was answered with 'y' then ask next question
+                {
+                when: function (response) {
+                return response.employee;
+                },
+                type: 'list',
+                name: 'employeetype',
+                message: 'Employee Type?',
+                choices:["Engineer", "Intern"]
+            },
+        ])
 
 const main = async () => {
     const inputs = await promptUser1();
-    console.log(inputs);  
+    console.log(inputs);
+    employeesBase.push(inputs)
+    console.log(employeesBase)
     if(inputs.employeetype==="Engineer"){
-            inquirer.prompt([
-                //   prompts for engineer
-                {
-                    type: 'input',
-                    name: 'engineerName',
-                    message: `Enter the engineer's name`,
-                },
-                {
-                    type: 'input',
-                    name: 'engineerID',
-                    message: `Enter the engineer's employee ID`,
-                },
-                {
-                    type: 'input',
-                    name: 'engineerEmail',
-                    message: `Enter the engineer's email`,
-                },
-                {
-                    type: 'input',
-                    name: 'engineerGithub',
-                    message: `Enter the engineer's GitHub username`,
-                },
-                 // prompt to add a new employee to the team besides manager
-                {
-                    name: 'employee',
-                    type: 'confirm',
-                    message: 'Would you like to add an Employee?'
-                }, 
-                //   if the previous prompt was answered with 'y' then ask next question
-                    {
-                    when: function (response) {
-                    return response.employee;
-                    },
-                    type: 'list',
-                    name: 'employeetype',
-                    message: 'Employee Type?',
-                    choices:["Engineer", "Intern"]
-                },
-            ])
+            const inputs1 = await choice1();
+            console.log(inputs1);
+            if(inputs1.employeetype=="Engineer"){
+                choice1()
+            }
+            else if(inputs1.employeetype=="Intern"){
+                choice2()
+            }
         }
         else{
-            inquirer.prompt([
-                //   prompts for intern
-                {
-                    type: 'input',
-                    name: 'internName',
-                    message: `Enter the intern's name`,
-                },
-                {
-                    type: 'input',
-                    name: 'internID',
-                    message: `Enter the intern's employee ID`,
-                },
-                {
-                    type: 'input',
-                    name: 'internEmail',
-                    message: `Enter the intern's email`,
-                },
-                {
-                    type: 'input',
-                    name: 'internUniversity',
-                    message: `Enter the intern's university name`,
-                },
-            ])
+            const inputs2 = await choice2();
+            console.log(inputs2);
+            if(inputs2.employeetype=="Intern"){
+                choice2()
+            }
+            else if(inputs2.employeetype=="Engineer"){
+                choice1()
+            }
         }
   };
   
   main();
+
+
+//   const main1 = async () => {   
+//     const inputs1 = await main();
+//     console.log(inputs1);  
+//   }
+
+//   main1()
