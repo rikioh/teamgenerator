@@ -1,6 +1,9 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 
+
+
+
 // const employeeChoice = (answers) =>
 // {
 // // Add employees to html
@@ -179,3 +182,31 @@ inquirer.prompt([
 )
 
 promptUser1()
+// const main = async () => {
+//     const inputs = await promptUser1();
+//     console.log(inputs);
+//     employeesBase.push(inputs)
+//     console.log(employeesBase)
+//     if(inputs.employeetype==="Engineer"){
+//         const inputs1 = await choice1();
+//         console.log(inputs1);
+//         if(inputs1.employeetype=="Engineer"){
+//             choice1()
+//         }
+//         else if(inputs1.employeetype=="Intern"){
+//             choice2()
+//         }
+//         }
+//     else{
+//         const inputs2 = await choice2();
+//         console.log(inputs2);
+//         if(inputs2.employeetype=="Intern"){
+//             choice2()
+//         }
+//         else if(inputs2.employeetype=="Engineer"){
+//             choice1()
+//         }
+//     }
+//   }
+  
+//   main();
