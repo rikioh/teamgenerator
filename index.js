@@ -63,6 +63,7 @@ inquirer.prompt([
         choices:["Engineer", "Intern"]
     },
 ]).then((response) => {
+    employeesBase.push(response)
     if(response.employeetype=="Engineer"){
         choice1()
     }
@@ -70,7 +71,7 @@ inquirer.prompt([
     {
         choice2()
     }
-    else return
+    else console.log(employeesBase)
 }
 )
 
@@ -114,6 +115,7 @@ const choice2 = () =>
         },
     ])
     .then((response) => {
+        employeesBase.push(response)
         if(response.employeetype=="Engineer"){
             choice1()
         }
@@ -167,6 +169,7 @@ inquirer.prompt([
     },
 ], 
 ).then((response) => {
+    employeesBase.push(response)
     if(response.employeetype=="Engineer"){
         choice1()
     }
