@@ -1,26 +1,58 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 
-// const employeeChoice = (answers) =>
-// {
-// // Add employees to html
-// }
-
-// const generateHTML = (answers) =>
-// `<!DOCTYPE html>
-// <html lang="en">
-// <head>
-//     <meta charset="UTF-8">
-//     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-//     <title>Document</title>
-// </head>
-// <body>
-//     Test document
-// </body>
-// </html>`
-
 employeesBase = []
+
+const managerCard = () => 
+    `<div class="card text-white bg-danger mb-3" style="max-width: 18rem;">
+        <div class="card-header">${employeesBase[i].Name}</div>
+        <div class="card-body">
+            <h5 class="card-title">Manager</h5>
+            <h5 class="card-title"><a href="mailto:${employeesBase[i].Email}">${employeesBase[i].Email}</a></h5>
+            <h5 class="card-title">${employeesBase[i].ID}</h5>
+            <h5 class="card-title">${employeesBase[i].Special}</h5>
+        </div>
+    </div>`
+
+const engineerCard = () =>
+`<div class="card text-white bg-danger mb-3" style="max-width: 18rem;">
+<div class="card-header">${employeesBase[i].Name}</div>
+<div class="card-body">
+    <h5 class="card-title">Engineer</h5>
+    <h5 class="card-title"><a href="mailto:${employeesBase[i].Email}">${employeesBase[i].Email}</a></h5>
+    <h5 class="card-title">${employeesBase[i].ID}</h5>
+    <h5 class="card-title"><a href="https://github.com/${employeesBase[i].Special}"></a>https://github.com/${employeesBase[i].Special}</h5>
+</div>
+</div>`
+
+const internCard = () =>
+`<div class="card text-white bg-danger mb-3" style="max-width: 18rem;">
+<div class="card-header">${employeesBase[i].Name}</div>
+<div class="card-body">
+    <h5 class="card-title">Intern</h5>
+    <h5 class="card-title"><a href="mailto:${employeesBase[i].Email}">${employeesBase[i].Email}</a></h5>
+    <h5 class="card-title">${employeesBase[i].ID}</h5>
+    <h5 class="card-title">College: ${employeesBase[i].Special}</h5>
+</div>
+</div>`
+
+const fullhtmlpush = []
+
+const cardGenerator = () => {
+    for(i=0;i<employeesBase.length;i++){
+        if(employeesBase[i].type=="Manager"){
+            fullhtmlpush.push(managerCard())
+        }
+        else if(employeesBase[i].type=="Engineer"){
+            fullhtmlpush.push(engineerCard())
+        }
+        else if(employeesBase[i].type=="Intern"){
+            fullhtmlpush.push(internCard())
+        }
+        else return
+    }
+    
+}
 
 const generateReadme = () =>
     `<!DOCTYPE html>
@@ -37,41 +69,7 @@ const generateReadme = () =>
     <div class="container">
     <div id="employeeRows">
         <div class ="row">
-            <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-                <div class="card-header">${employeesBase[0].Name}</div>
-                <div class="card-body">
-                    <h5 class="card-title">Manager</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-            </div>
-            <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-                <div class="card-header">Header</div>
-                <div class="card-body">
-                    <h5 class="card-title">Primary card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-            </div>
-            <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-                <div class="card-header">Header</div>
-                <div class="card-body">
-                    <h5 class="card-title">Primary card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-            </div>
-            <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-                <div class="card-header">Header</div>
-                <div class="card-body">
-                    <h5 class="card-title">Primary card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-            </div>
-            <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-                <div class="card-header">Header</div>
-                <div class="card-body">
-                    <h5 class="card-title">Primary card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-            </div>
+            ${fullhtmlpush.join()}
         </div>
     </div>
     </div>
@@ -80,9 +78,10 @@ const generateReadme = () =>
 
 const init = () => {
       try {
+        cardGenerator()
         const htmlfile = generateReadme();
         fs.writeFileSync('index.html', htmlfile)
-        console.log('Successfully wrote to READMEexample.md');
+        console.log('Successfully wrote to index.html');
       } catch (error) {
         console.log(error);
       }
@@ -129,16 +128,21 @@ inquirer.prompt([
         choices:["Engineer", "Intern"]
     },
 ]).then((response) => {
-    employeesBase.push(response)
     if(response.employeetype=="Engineer"){
+        response.type = "Engineer"
+        employeesBase.push(response)
         choice1()
     }
     else if(response.employeetype=="Intern")
     {
+        response.type = "Engineer"
+        employeesBase.push(response)
         choice2()
     }
-    else init()
-    console.log(employeesBase[0].Name)
+    else
+    response.type = "Engineer"
+    employeesBase.push(response) 
+    init()
 }
 )
 
@@ -182,15 +186,21 @@ const choice2 = () =>
         },
     ])
     .then((response) => {
-        employeesBase.push(response)
         if(response.employeetype=="Engineer"){
+            response.type = "Intern"
+            employeesBase.push(response)
             choice1()
         }
         else if(response.employeetype=="Intern")
         {
+            response.type = "Intern"
+            employeesBase.push(response)
             choice2()
         }
-        else init()
+        else
+        response.type = "Intern"
+        employeesBase.push(response) 
+        init()
     }
     )
 
@@ -236,6 +246,7 @@ inquirer.prompt([
     },
 ], 
 ).then((response) => {
+    response.type = "Manager"
     employeesBase.push(response)
     if(response.employeetype=="Engineer"){
         choice1()
@@ -249,3 +260,5 @@ inquirer.prompt([
 )
 
 promptUser1()
+
+module.exports = employeesBase;
