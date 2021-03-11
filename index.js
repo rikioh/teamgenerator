@@ -21,7 +21,7 @@ const engineerCard = () =>
     <h5 class="card-title">Engineer</h5>
     <h5 class="card-title"><a href="mailto:${employeesBase[i].Email}">${employeesBase[i].Email}</a></h5>
     <h5 class="card-title">${employeesBase[i].ID}</h5>
-    <h5 class="card-title"><a href="https://github.com/${employeesBase[i].Special}"></a>https://github.com/${employeesBase[i].Special}</h5>
+    <h5 class="card-title"><a href="https://github.com/${employeesBase[i].Special}">https://github.com/${employeesBase[i].Special}</a></h5>
 </div>
 </div>`
 
@@ -69,7 +69,7 @@ const generateReadme = () =>
     <div class="container">
     <div id="employeeRows">
         <div class ="row">
-            ${fullhtmlpush.join()}
+            ${fullhtmlpush}
         </div>
     </div>
     </div>
@@ -79,6 +79,7 @@ const generateReadme = () =>
 const init = () => {
       try {
         cardGenerator()
+        fullhtmlpush.join()
         const htmlfile = generateReadme();
         fs.writeFileSync('index.html', htmlfile)
         console.log('Successfully wrote to index.html');
@@ -86,7 +87,6 @@ const init = () => {
         console.log(error);
       }
   };
-
 
 const choice1 = () =>
 inquirer.prompt([
@@ -128,20 +128,16 @@ inquirer.prompt([
         choices:["Engineer", "Intern"]
     },
 ]).then((response) => {
+    response.type = "Engineer"
+    employeesBase.push(response)
     if(response.employeetype=="Engineer"){
-        response.type = "Engineer"
-        employeesBase.push(response)
         choice1()
     }
     else if(response.employeetype=="Intern")
     {
-        response.type = "Engineer"
-        employeesBase.push(response)
         choice2()
     }
     else
-    response.type = "Engineer"
-    employeesBase.push(response) 
     init()
 }
 )
@@ -186,20 +182,15 @@ const choice2 = () =>
         },
     ])
     .then((response) => {
+        response.type = "Intern"
+        employeesBase.push(response)
         if(response.employeetype=="Engineer"){
-            response.type = "Intern"
-            employeesBase.push(response)
             choice1()
         }
-        else if(response.employeetype=="Intern")
-        {
-            response.type = "Intern"
-            employeesBase.push(response)
+        else if(response.employeetype=="Intern"){
             choice2()
         }
         else
-        response.type = "Intern"
-        employeesBase.push(response) 
         init()
     }
     )
